@@ -1,4 +1,4 @@
-# GST Sahayak — a RAG Q&A Bot over Official CBIC Publications
+# GST Assistant — a RAG Q&A Bot over Official CBIC Publications
 
 **Week 2 Project · n8n (no-code) track · Bring-your-own use case**
 

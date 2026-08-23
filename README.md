@@ -1,4 +1,4 @@
-# GST Sahayak — RAG Q&A Bot over Official CBIC Publications
+# GST Assistant — RAG Q&A Bot over Official CBIC Publications
 
 A no-code RAG application built in **n8n** that answers Indian GST compliance questions from official CBIC publications — with source citations, a designed refusal path, and a measured reranking pipeline.
 
@@ -18,11 +18,23 @@ Chat Trigger → AI Agent (`gpt-4o-mini` + memory) with Pinecone as a retrieval 
 
 15-question evaluation (straightforward / ambiguous / multi-document / unanswerable): **15/15 pass · faithfulness 4.8/5 · 2/2 correct refusals**. Rerank on/off comparison showed reranking fixed one materially wrong answer (Section 29(5) ITC reversal on registration cancellation). Full analysis: `deliverables/evaluation-report.md`.
 
+## Bonus: vibe-coded chat UI
+
+`ui/index.html` is a standalone chat front-end (vanilla HTML/JS, single file, no build step)
+that talks directly to the n8n chat webhook — suggested-question chips, typing indicator,
+citation-friendly rendering, and a not-tax-advice disclaimer. With the chat workflow active,
+serve it locally and open http://localhost:8080:
+
+```
+npx http-server ui -p 8080 -c-1
+```
+
 ## Repository layout
 
 ```
 corpus/              14 official CBIC PDFs (GST Flyers + FAQ chapters)
 workflows/           n8n workflow JSON (import via n8n → Import from File)
+ui/                  vibe-coded chat front-end (bonus add-on)
 deliverables/
   project-documentation.md    full write-up (framework, iterations, learnings)
   evaluation-report.md        15-question eval + reranking impact analysis

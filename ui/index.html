@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GST Assistant — Ask anything about GST compliance</title>
+<style>
+  :root{
+    --saffron:#9d5c63; --saffron-soft:#f6e9ea; --ink:#1f2430; --paper:#faf7f5;
+    --card:#ffffff; --line:#e9dfe0; --muted:#6b7280; --green:#0f766e;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background:var(--paper); color:var(--ink); height:100vh; display:flex; flex-direction:column;
+  }
+  header{
+    background:var(--card); border-bottom:1px solid var(--line);
+    padding:14px 22px; display:flex; align-items:center; gap:14px;
+  }
+  .logo{
+    width:42px; height:42px; border-radius:10px; background:var(--saffron);
+    color:#fff; display:flex; align-items:center; justify-content:center;
+    font-weight:800; font-size:19px; letter-spacing:-.5px;
+  }
+  header h1{font-size:17px; font-weight:700; color:var(--saffron);}
+  header p{font-size:12.5px; color:var(--muted); margin-top:2px;}
+  .badge{
+    margin-left:auto; font-size:11px; font-weight:600; color:var(--green);
+    background:#ecfdf5; border:1px solid #a7f3d0; padding:4px 10px; border-radius:99px;
+  }
+  main{flex:1; overflow-y:auto; padding:26px 0 12px;}
+  .wrap{max-width:760px; margin:0 auto; padding:0 20px;}
+  .msg{display:flex; gap:12px; margin-bottom:18px; animation:rise .25s ease;}
+  @keyframes rise{from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none}}
+  .avatar{
+    width:32px; height:32px; border-radius:8px; flex:none; display:flex;
+    align-items:center; justify-content:center; font-size:15px; font-weight:700;
+  }
+  .msg.bot .avatar{background:var(--saffron-soft); color:var(--saffron);}
+  .msg.user .avatar{background:var(--ink); color:#fff; font-size:13px;}
+  .bubble{
+    background:var(--card); border:1px solid var(--line); border-radius:12px;
+    padding:12px 16px; font-size:14.5px; line-height:1.62; max-width:640px;
+    overflow-wrap:break-word;
+  }
+  .msg.user .bubble{background:var(--saffron-soft); border-color:#e5cdd0;}
+  .bubble strong{color:var(--saffron); font-weight:700;}
+  .bubble ol,.bubble ul{padding-left:20px; margin:6px 0;}
+  .bubble li{margin:3px 0;}
+  .bubble p+p{margin-top:8px;}
+  .typing{display:inline-flex; gap:5px; padding:6px 2px;}
+  .typing i{
+    width:7px; height:7px; border-radius:50%; background:var(--saffron);
+    opacity:.35; animation:blink 1.2s infinite;
+  }
+  .typing i:nth-child(2){animation-delay:.2s} .typing i:nth-child(3){animation-delay:.4s}
+  @keyframes blink{0%,100%{opacity:.25} 50%{opacity:1}}
+  .chips{display:flex; flex-wrap:wrap; gap:8px; margin:4px 0 18px 44px;}
+  .chip{
+    font-size:12.5px; padding:7px 13px; border-radius:99px; border:1px solid var(--line);
+    background:var(--card); color:var(--ink); cursor:pointer; transition:all .15s;
+  }
+  .chip:hover{border-color:var(--saffron); color:var(--saffron); background:var(--saffron-soft);}
+  footer{border-top:1px solid var(--line); background:var(--card); padding:14px 20px 10px;}
+  .inputrow{max-width:760px; margin:0 auto; display:flex; gap:10px;}
+  #q{
+    flex:1; font-size:15px; font-family:inherit; padding:12px 16px;
+    border:1.5px solid var(--line); border-radius:12px; outline:none; resize:none;
+    max-height:120px; line-height:1.5; background:var(--paper);
+  }
+  #q:focus{border-color:var(--saffron);}
+  #send{
+    background:var(--saffron); color:#fff; border:none; border-radius:12px;
+    padding:0 22px; font-size:15px; font-weight:600; cursor:pointer; transition:opacity .15s;
+  }
+  #send:disabled{opacity:.45; cursor:default;}
+  .disclaim{
+    max-width:760px; margin:8px auto 0; font-size:11px; color:var(--muted); text-align:center;
+  }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>GST Assistant</h1>
+    <p>Answers grounded in official CBIC publications — with citations</p>
+  </div>
+  <span class="badge">● RAG · 14 CBIC documents</span>
+</header>
+
+<main><div class="wrap" id="chat">
+  <div class="msg bot">
+    <div class="avatar">🪔</div>
+    <div class="bubble">
+      Namaste! I answer <strong>GST procedure and compliance questions</strong> — registration,
+      input tax credit, returns, refunds, e-way bills, composition scheme — using only official
+      CBIC publications, and I cite my sources. I don't answer current tax-rate questions,
+      and if something isn't in my documents, I'll say so instead of guessing.
+    </div>
+  </div>
+  <div class="chips" id="chips">
+    <button class="chip">Who is required to register for GST?</button>
+    <button class="chip">Can I claim ITC on my car?</button>
+    <button class="chip">What is the composition scheme?</button>
+    <button class="chip">When is an e-way bill required?</button>
+  </div>
+</div></main>
+
+<footer>
+  <div class="inputrow">
+    <textarea id="q" rows="1" placeholder="Ask a GST question…"></textarea>
+    <button id="send">Ask</button>
+  </div>
+  <p class="disclaim">Educational assistant over CBIC publications (2017–2019 editions). Not professional tax advice — consult a Chartered Accountant for decisions.</p>
+</footer>
+
+<script>
+const WEBHOOK = "http://localhost:5678/webhook/7a373bd2-f0be-45fd-8054-ab8015c0bd91/chat";
+const sessionId = "ui-" + Math.random().toString(36).slice(2);
+const chat = document.getElementById("chat");
+const q = document.getElementById("q");
+const send = document.getElementById("send");
+
+function mdLite(t){
+  // minimal, safe rendering: escape HTML, then bold + numbered/bulleted lines
+  t = t.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  t = t.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+  const lines = t.split("\n");
+  let html = "", list = null;
+  for (const ln of lines){
+    const ol = ln.match(/^\s*\d+\.\s+(.*)/), ul = ln.match(/^\s*[-•]\s+(.*)/);
+    if (ol || ul){
+      const tag = ol ? "ol" : "ul";
+      if (list !== tag){ if (list) html += `</${list}>`; html += `<${tag}>`; list = tag; }
+      html += `<li>${(ol||ul)[1]}</li>`;
+    } else {
+      if (list){ html += `</${list}>`; list = null; }
+      if (ln.trim()) html += `<p>${ln}</p>`;
+    }
+  }
+  if (list) html += `</${list}>`;
+  return html;
+}
+
+function add(role, html){
+  const div = document.createElement("div");
+  div.className = "msg " + role;
+  div.innerHTML = `<div class="avatar">${role==="bot"?"🪔":"You"}</div><div class="bubble">${html}</div>`;
+  chat.appendChild(div);
+  div.scrollIntoView({behavior:"smooth", block:"end"});
+  return div;
+}
+
+async function ask(text){
+  text = text.trim();
+  if (!text) return;
+  document.getElementById("chips")?.remove();
+  add("user", mdLite(text));
+  q.value = ""; q.style.height = "auto";
+  send.disabled = true;
+  const holder = add("bot", '<span class="typing"><i></i><i></i><i></i></span>');
+  try{
+    const r = await fetch(WEBHOOK, {
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({action:"sendMessage", sessionId, chatInput:text})
+    });
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    const data = await r.json();
+    holder.querySelector(".bubble").innerHTML = mdLite(data.output || "(empty response)");
+  }catch(e){
+    holder.querySelector(".bubble").innerHTML =
+      "<strong>Connection problem:</strong> " + e.message +
+      "<p>Is n8n running on localhost:5678 with the chat workflow active?</p>";
+  }
+  send.disabled = false;
+  holder.scrollIntoView({behavior:"smooth", block:"end"});
+  q.focus();
+}
+
+send.onclick = () => ask(q.value);
+q.addEventListener("keydown", e => {
+  if (e.key === "Enter" && !e.shiftKey){ e.preventDefault(); ask(q.value); }
+});
+q.addEventListener("input", () => { q.style.height = "auto"; q.style.height = q.scrollHeight + "px"; });
+document.getElementById("chips").addEventListener("click", e => {
+  if (e.target.classList.contains("chip")) ask(e.target.textContent);
+});
+</script>
+</body>
+</html>
