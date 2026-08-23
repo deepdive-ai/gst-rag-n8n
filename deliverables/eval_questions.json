@@ -1,0 +1,17 @@
+[
+  {"id": 1,  "category": "straightforward", "q": "Who is required to register for GST?"},
+  {"id": 2,  "category": "straightforward", "q": "What is input tax credit and who can claim it?"},
+  {"id": 3,  "category": "straightforward", "q": "What is the time limit for taking input tax credit on an invoice?"},
+  {"id": 4,  "category": "straightforward", "q": "What is the composition levy scheme and who is eligible for it?"},
+  {"id": 5,  "category": "straightforward", "q": "What is an e-way bill and when is it required?"},
+  {"id": 6,  "category": "straightforward", "q": "What is reverse charge under GST?"},
+  {"id": 7,  "category": "straightforward", "q": "How can a taxpayer claim a refund of unutilised input tax credit?"},
+  {"id": 8,  "category": "straightforward", "q": "What returns does a normal registered taxpayer have to file under GST?"},
+  {"id": 9,  "category": "ambiguous", "q": "Can I claim ITC on my car?"},
+  {"id": 10, "category": "ambiguous", "q": "Do I need to register if I sell online?"},
+  {"id": 11, "category": "ambiguous", "q": "What happens if I file late?"},
+  {"id": 12, "category": "multi-document", "q": "I am a small trader under the composition scheme. Can I claim input tax credit and do I need to file an annual return?"},
+  {"id": 13, "category": "multi-document", "q": "If I cancel my GST registration, what happens to the input tax credit on my stock, and can I get a refund?"},
+  {"id": 14, "category": "unanswerable", "q": "What is the GST rate on cement?"},
+  {"id": 15, "category": "unanswerable", "q": "What are the income tax slab rates for individuals?"}
+]
